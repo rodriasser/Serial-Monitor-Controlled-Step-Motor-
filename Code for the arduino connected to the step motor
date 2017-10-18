@@ -1,0 +1,226 @@
+
+  /*///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+  ////////////////////SIMPLE CODE FOR UNIPOLAR STEPPER MOTOR///////////////////
+  //////////by RODRIGO ROSAS - MAASTRICHT UNIVERSITY - SCIENCE PROGRAM/////////
+  /////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+  ///The direction and amount of steps can be defined in the serial monitor////
+  /////////////////////////Use the serial monitor to///////////////////////////
+  ///The direction of rotation is relative to the face of the stepper motor////
+  /////////////////////////////////ENJOY!//////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+     /////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////
+         ////////////////////////////////////////////////////////////
+           ///////////////////////////////////////////////////////
+            /   /   /   /   /   /   /   /   /   /   /   /   /   /
+            \   \   \   \   \   \   \   \   \   \   \   \   \   \
+            /   /   /   /   /   /   /   /   /   /   /   /   /   / 
+            \   \   \   \   \   \   \   \   \   \   \   \   \   \
+            *    *   *   *   *   *   *   *   *   *   *   *   *   */
+
+//GLOBAL VARIABLES                     
+//Defines pins connected to the stepper motor
+#define IN1  8    
+#define IN2  9
+#define IN3  10
+#define IN4  11
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
+
+int Steps;                  //  Number of steps that the stepper will make
+int cstep;                  //  Variable for step1(), which is the clockwise direction
+int kstep;                  //  Variable for step0(), which is the counter clockwise direction
+int numSteps;               //  Step verifyer> is used to stop the motor > Needs further revision 
+int dir;
+
+void setup() {
+  
+  Serial.begin(19200);      //  Starts the serial monitor at the right Htz
+  Serial.println("serial connection established"); //eco check
+  Serial.println(" ");
+  pinMode(IN1, OUTPUT);     //  Declares the previously sevelcted pins as output
+  pinMode(IN2, OUTPUT); 
+  pinMode(IN3, OUTPUT); 
+  pinMode(IN4, OUTPUT); 
+
+}
+
+void loop() 
+{
+Serial.println("Which direction do you want it to go (0 is clockwise and 1 is anticlockwise)?"); 
+  while ( Serial.available()==0) {  }
+  dir = Serial.parseInt(); //Scans for the input from the Serial Monitor
+  
+  
+   Serial.println("How many steps do you want to rotate? (4096 is a full rotation)");
+   while ( Serial.available()==0) {  }
+  Steps = Serial.parseInt(); //  Scans for the input from the Serial Monitor
+
+  //Counditial to display the steps made as the end of the rotation is reached
+  for(int x=0;x<Steps;x++)
+    {
+        if (x==1)
+    Serial.print("  steps made:  "); 
+    if (x==Steps-3)
+    Serial.println(Steps);
+    if (x==Steps-2)
+    Serial.println(" ");
+    if(x==Steps-1)
+    Steps= Serial.parseInt();
+  
+  //Conditional to determine direction after it has been chosen
+  if(dir == 0){
+      step1(); 
+      //Serial.println("0 chosen");
+      }
+    else if(dir == 1){
+      step0();
+      //Serial.println("1 chosen");
+      } 
+    
+    delayMicroseconds (900);
+    numSteps = numSteps+1;
+    if(numSteps == Steps){
+    while (true) /*Do nothing*/;  //  Comand that stops the step cycles
+    }
+  
+  }
+  Serial.println (" Finished rotating");
+  Serial.println (" ");
+  delay(1000);
+}
+//Void loop for clockwise direction
+void step0()
+{
+   switch(cstep)
+ {
+   case 0:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, HIGH);
+   break; 
+   case 1:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, HIGH);
+     digitalWrite(IN4, HIGH);
+   break; 
+   case 2:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, HIGH);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 3:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, HIGH);
+     digitalWrite(IN3, HIGH);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 4:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, HIGH);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 5:
+     digitalWrite(IN1, HIGH); 
+     digitalWrite(IN2, HIGH);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+     case 6:
+     digitalWrite(IN1, HIGH); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 7:
+     digitalWrite(IN1, HIGH); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, HIGH);
+   break;  
+   default:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+  }
+    cstep=cstep+1;
+   
+   if(cstep==8)
+     {cstep=0;}
+  }
+//Void loop for cunter clockwise direction
+void step1()
+{
+  switch(kstep)
+ { 
+ case 10:
+     digitalWrite(IN1, HIGH); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, HIGH);
+   break; 
+   case 11:
+     digitalWrite(IN1, HIGH); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 12:
+     digitalWrite(IN1, HIGH); 
+     digitalWrite(IN2, HIGH);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 13:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, HIGH);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 14:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, HIGH);
+     digitalWrite(IN3, HIGH);
+     digitalWrite(IN4, LOW);
+   break; 
+   case 15:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, HIGH);
+     digitalWrite(IN4, LOW);
+   break; 
+     case 16:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, HIGH);
+     digitalWrite(IN4, HIGH);
+   break; 
+   case 17:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, HIGH);
+   break;
+    default:
+     digitalWrite(IN1, LOW); 
+     digitalWrite(IN2, LOW);
+     digitalWrite(IN3, LOW);
+     digitalWrite(IN4, LOW);
+   break; 
+}
+    kstep=kstep+1;
+  
+   if(kstep==18)
+   {kstep=10;}
+}
