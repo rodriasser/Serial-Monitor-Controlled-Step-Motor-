@@ -1,15 +1,14 @@
-
-  /*///////////////////////////////////////////////////////////////////////////
+/*///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////
   ////////////////////SIMPLE CODE FOR UNIPOLAR STEPPER MOTOR///////////////////
   //////////by RODRIGO ROSAS - MAASTRICHT UNIVERSITY - SCIENCE PROGRAM/////////
   /////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////
   ///The direction and amount of steps can be defined in the serial monitor////
-  /////////////////////////////////////////////////////////////////////////////
+  ////////////////Use the serial monitor to change parameters://///////////////
   ///The direction of rotation is relative to the face of the stepper motor////
   /////////////////////////////////ENJOY!//////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
    //////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
      /////////////////////////////////////////////////////////////////////
@@ -23,13 +22,14 @@
             \   \   \   \   \   \   \   \   \   \   \   \   \   \
             *    *   *   *   *   *   *   *   *   *   *   *   *   */
 
+
 //GLOBAL VARIABLES                     
 //Defines pins connected to the stepper motor
 #define IN1  8    
 #define IN2  9
 #define IN3  10
 #define IN4  11
-#pragma GCC diagnostic ignored "-Wwrite-strings"
+#pragma GCC diagnostic ignored "-Write-strings"
 
 
 int Steps;                  //  Number of steps that the stepper will make
@@ -52,13 +52,19 @@ void setup() {
 
 void loop() 
 {
-Serial.println("Which direction do you want it to go (0 is clockwise and 1 is anticlockwise)?"); 
+  Serial.println("Which direction do you want it to go (0 is clockwise and 1 is anticlockwise)?"); 
   while ( Serial.available()==0) {  }
   dir = Serial.parseInt(); //Scans for the input from the Serial Monitor
   
+  if (dir == 1) 
+  Serial.println ("anticlockwise (1) chosen");
+
+  if (dir == 0)
+  Serial.println ("clockwise (0) chosen");
+
   
-   Serial.println("How many steps do you want to rotate? (4096 is a full rotation)");
-   while ( Serial.available()==0) {  }
+  Serial.println("How many steps do you want to rotate? (4112 is a full rotation)");
+  while ( Serial.available()==0) {  }
   Steps = Serial.parseInt(); //  Scans for the input from the Serial Monitor
 
   //Counditial to display the steps made as the end of the rotation is reached
@@ -76,11 +82,9 @@ Serial.println("Which direction do you want it to go (0 is clockwise and 1 is an
   //Conditional to determine direction after it has been chosen
   if(dir == 0){
       step1(); 
-      //Serial.println("0 chosen");
       }
     else if(dir == 1){
       step0();
-      //Serial.println("1 chosen");
       } 
     
     delayMicroseconds (900);
